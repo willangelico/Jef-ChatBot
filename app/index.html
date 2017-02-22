@@ -4,17 +4,24 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>J-ef ChatBot</title>
+	<!-- Latest compiled and minified CSS -->	
 	<link rel="stylesheet" href="assets/css/style.min.css">
 </head>
 <body>
-	<header>
-		<h1>J-ef ChatBot</h1>
-		<p>A simple chatbot</p>
+	<header>		
+		@@include('elements/banner-extra.html')
+		@@include('elements/top.html')					
 	</header>
+	<nav>
+		@@include('elements/nav.html')
+	</nav>
 	<main>
-		<section id="teste"></section>
+		@@include('elements/chat.html')		
 	</main>
-	<footer>Dev. by Will Angélico</footer>
+	<footer>
+		@@include('elements/footer.html')
+	</footer>
+	<script src="assets/js/vendor.js"></script>
 	<script src="assets/js/script.min.js"></script>
 </body>
 </html>

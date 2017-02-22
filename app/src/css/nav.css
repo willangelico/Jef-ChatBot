@@ -1,0 +1,24 @@
+nav ul {
+  list-style: none;
+  background-color: #898989;
+  height: 50px;
+  padding: 15px; }
+  nav ul li {
+    float: left; }
+    nav ul li a {
+      padding: 10px 20px;
+      color: #fff; }
+      nav ul li a:hover {
+        background-color: #494646;
+        color: #898989;
+        text-decoration: none; }
+
+@media screen and (max-width: 767px) {
+  nav {
+    position: fixed;
+    left: -150%;
+    top: 0;
+    bottom: 0;
+    z-index: 101;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8); } }
