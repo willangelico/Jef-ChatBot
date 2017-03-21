@@ -6,6 +6,7 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var babel = require("gulp-babel");
+var order = require("gulp-order");
 var concat = require("gulp-concat");
 var sourcemaps = require('gulp-sourcemaps');
 var fileinclude = require('gulp-file-include');
@@ -16,13 +17,12 @@ var liveserver = require('gulp-live-server');
 gulp.task('default', ['main-bower-files-js','fonts','sass','sass-concat','js','html','watch','server']);
 
 gulp.task('main-bower-files-js',['js'], function(){
-	 var filterJS = gulpFilter('**/*.js', { restore: true });
+	 var filterJS = gulpFilter(['**/*.js']);
 	return gulp.src('./bower.json')
-		.pipe(mainBowerFiles({filter: '*.js'}))
+		.pipe(mainBowerFiles())
 		.pipe(filterJS)
         .pipe(concat('vendor.js'))
         .pipe(uglify())
-        .pipe(filterJS.restore)
 		.pipe(gulp.dest('app/src/js'))
 });
 
@@ -43,10 +43,15 @@ gulp.task('js',function(){
 	return gulp.src('app/src/js/**/*.js')	
 		.pipe(babel({
             presets: ['es2015']
-        }))        
+        }))   
+        .pipe(order([
+		    "app/src/js/vendor.js",
+		    "app/src/js/functions/*.js",
+		    "app/src/js/ini.js"
+		  ], { base: './' }))     
         .pipe(concat('script.min.js'))
         .pipe(sourcemaps.write('.'))
-       // .pipe(uglify())
+        .pipe(uglify())
 		.pipe(gulp.dest('dist/assets/js'));
 });
 

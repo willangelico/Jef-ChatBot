@@ -8796,9 +8796,10 @@ nav ul {
     -moz-border-radius: 100px;
     -ms-border-radius: 100px;
     -o-border-radius: 100px;
-    width: 15px;
-    height: 15px;
     display: inline-block; }
+    #chat .ball.red, #chat .ball.yellow, #chat .ball.green, #chat .ball.online {
+      width: 15px;
+      height: 15px; }
     #chat .ball.red {
       background-color: #ff5f57; }
     #chat .ball.yellow {
@@ -8806,7 +8807,14 @@ nav ul {
     #chat .ball.green {
       background-color: #28ca42; }
     #chat .ball.gray {
-      background-color: #898989; }
+      width: 10px;
+      height: 10px;
+      background-color: #898989;
+      animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite; }
+      #chat .ball.gray:nth-of-type(2) {
+        animation-delay: .2s; }
+      #chat .ball.gray:nth-of-type(3) {
+        animation-delay: .4s; }
     #chat .ball.online {
       background-color: #28ca42;
       border: 3px solid #23395a; }
@@ -8852,7 +8860,10 @@ nav ul {
       #chat section .conversation .robot, #chat section .conversation .user {
         margin-top: 50px;
         width: 60%;
-        color: #fff; }
+        color: #fff;
+        transform: scale(0);
+        transform-origin: 0 0;
+        animation: bounce 500ms linear both; }
         #chat section .conversation .robot .avatar, #chat section .conversation .user .avatar {
           height: 100%; }
         #chat section .conversation .robot .msg, #chat section .conversation .user .msg {
@@ -8879,6 +8890,8 @@ nav ul {
           margin-right: 70px; }
     #chat section .interation {
       display: table-row; }
+      #chat section .interation .status {
+        display: none; }
       #chat section .interation .write {
         border-top: 1px solid #898989; }
         #chat section .interation .write input {
@@ -8886,12 +8899,60 @@ nav ul {
           border: none;
           background-color: transparent;
           margin: 20px 10px 10px;
-          width: 100%;
-          padding: 10px; }
+          width: 90%;
+          padding: 10px;
+          float: left; }
           #chat section .interation .write input:focus {
             outline: none; }
+        #chat section .interation .write button {
+          margin: 20px 0px 10px;
+          width: 50px;
+          height: 50px;
+          border-radius: 50px;
+          -webkit-border-radius: 50px;
+          -moz-border-radius: 50px;
+          -ms-border-radius: 50px;
+          -o-border-radius: 50px; }
+          #chat section .interation .write button.active {
+            background: #28CA42;
+            color: #FFF;
+            border: none; }
 
 .busca legend,
 .busca label,
 .busca select {
   display: none; }
+
+@keyframes ball {
+  from {
+    transform: translateY(0) scaleY(0.8); }
+  to {
+    transform: translateY(-10px); } }
+
+@keyframes bounce {
+  0% {
+    transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  4.7% {
+    transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  9.41% {
+    transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  14.11% {
+    transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  18.72% {
+    transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  24.32% {
+    transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  29.93% {
+    transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  35.54% {
+    transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  41.04% {
+    transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  52.15% {
+    transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  63.26% {
+    transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  85.49% {
+    transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
+  100% {
+    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } }

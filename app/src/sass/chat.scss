@@ -2,25 +2,43 @@
 
 #chat{
 	.ball{
-		@include border-radius(100px);
-		width: 15px;	
-		height: 15px;
-		display: inline-block;
+		@include border-radius(100px);		
+		display: inline-block;	
+		&.red,
+		&.yellow,
+		&.green,
+		&.online{
+			width: 15px;	
+			height: 15px;
+		}	
 		&.red{
 			background-color: #ff5f57;
+
 		}
 		&.yellow{
 			background-color: #ffbe2f;
+
 		}	
 		&.green{
 			background-color: #28ca42;
+
 		}
 		&.gray{
+			width: 10px;
+			height: 10px;
 			background-color: #898989;
+			animation: ball .45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+			&:nth-of-type(2){			
+				animation-delay: .2s;
+			}
+			&:nth-of-type(3){
+				animation-delay: .4s;	
+			}
 		}
 		&.online{
 			background-color: #28ca42;
 			border: 3px solid #23395a;
+
 		}
 	}	height: 630px;
 	aside,
@@ -66,11 +84,14 @@
 			display: block;
 			vertical-align: bottom;
 			height: 480px;
-			overflow-y: scroll;
+			overflow-y: scroll;			
 			.robot,.user{
 				margin-top: 50px;
 				width: 60%;
 				color: #fff;	
+				transform: scale(0);
+				transform-origin: 0 0;
+				animation: bounce 500ms linear both;
 				.avatar{
 					height: 100%;
 				}
@@ -106,6 +127,9 @@
 			.status,.write{
 				
 			}
+			.status{
+				display: none;
+			}
 			.write{
 				border-top: 1px solid #898989;
 				input{
@@ -113,10 +137,22 @@
 					border: none;
 					background-color: transparent;
 					margin: 20px 10px 10px;
-					width: 100%;
+					width: 90%;
 					padding: 10px;
+					float:left;
 					&:focus{
 						outline: none;
+					}
+				}
+				button{
+					margin: 20px 0px 10px;
+					width: 50px;
+    				height: 50px;    				
+					@include border-radius(50px);
+					&.active{
+						background: #28CA42;
+    					color: #FFF;
+    					border: none;
 					}
 				}
 			}
