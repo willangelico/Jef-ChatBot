@@ -45,7 +45,7 @@
 		var conversationBox = $('.conversation');
 
 		function displayDialog(v,i){
-			let timer = (i+1)*3000;
+			let timer = (parseInt(i)+1)*3000;
 			status.show();
 			setTimeout(function(){
 				conversationBox.append(robot(v.dialog));			
@@ -55,15 +55,50 @@
 			},timer);
 		}
 
-		function bootTalk($id = 1){
+		function displayInput(v,i){
+			//console.log(v+"-"+i)
+			setTimeout(function(){
+				console.log("inout");
+			},i*3000);
+			//console.log(i);
+			//bootTalk(i);
+		}
+
+		function bootTalk($index = 0){
 			//console.log($id);
 								
-			let conversation = talk.bootConversation.forEach((v, i) => 	
-					displayDialog(v,i)
-			);
+			// let conversation = talk.bootConversation.forEach((v, i) => 	{
+
+			// 		if(v.dep){
+			// 			console.log(v.dep);
+			// 			displayInput(v,i);
+			// 			return false;
+			// 		}else{
+			// 			displayDialog(v,i);
+			// 			//return true;
+			// 		}
+			// 	}
+			// );
+			// 
+			
+			for (var i in talk.bootConversation){
+				console.log(i+">="+$index);
+				if(i >= $index){
+					//console.log(talk.bootConversation[i]);
+					//console.log(i);
+					var v = talk.bootConversation[i];
+					if(v.dep){
+						displayInput(v,i);
+						break;
+					}else{
+						displayDialog(v,i);
+					}
+				}
+			}
 			setTimeout(function(){
 				status.hide();				
-			},talk.bootConversation.length*3000);
+			},i*3000);
+
 		}
 
 		bootTalk();
