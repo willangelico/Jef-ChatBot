@@ -3,33 +3,30 @@
     "use strict";
 
 	$(document).ready( function(){
-		//alert('teste');
-		// let txt = "textando babel2";
-		// $('#menu-mobile').click( function(){
-				
-		// 	$('nav').style.left = "0px"; 
-		// });
-		// $('.close-mobile').click( function(){
-		// 	$('nav').fadeOut();
-		// });
-		$(window).scroll(function() {
-			console.log($("header").outerHeight());
-		});
 
+		var status = $('.status');
 
+		var conversationBox = $('.conversation');
+
+		var avatar = {
+			"robot" : "http://lorempixel.com/60/60/people/?1",
+			"user" : "http://lorempixel.com/60/60/people/?1"
+		}
+			
 		var talk = {"bootConversation":[
 						{ "id": 1, "dep": false, "dialog":"Valeu por aceitar a conversa. Será bem rapidinho... Vamos lá?" },
 						{ "id": 1, "dep": false, "dialog":"Meu Nome é Jéff, e o seu?" },
-						{ "id": 2, "dep": true, "condition": "notEmpty", "dialog":"Muito prazer, $1" },
+						{ "id": 2, "dep": true, "depType":"input", "depName": "name", "condition": "notEmpty", "dialog":"Muito prazer, ${i1}" },
 						{ "id": 2, "dep": false, "dialog":"E aí, vc tem carro?" },
-						{ "id": 3, "dep": true, "condition":"yes" ,"dialog":"Fale mais sobre ele! Qual o modelo?" },
+						{ "id": 3, "dep": true, "depType": "select", "depName": "isCar", "condition":"yes|no" ,"dialog":"Fale mais sobre ele! Qual o modelo?|E moto você tem?" },
+						
 
 					]};
 
 		var robot = (txt) => `
 			<div class="robot">
 				<div class="avatar">
-					<img src="http://lorempixel.com/60/60/people/?1" alt="" class="icon img-circle img-responsive">
+					<img src=${avatar.robot} alt="" class="icon img-circle img-responsive">
 				</div>
 				<div class="msg">
 					<p>${txt}</p>
@@ -39,15 +36,26 @@
 		var user = (txt) => `
 			<div class="user">
 				<div class="avatar">
-					<img src="http://lorempixel.com/60/60/people/?1" alt="" class="icon img-circle img-responsive">
+					<img src=${avatar.user} alt="" class="icon img-circle img-responsive">
 				</div>
 				<div class="msg">
 					<p>${txt}</p>
 				</div>
 			</div>`;
 
-		var status = $('.status');
-		var conversationBox = $('.conversation');
+		var saveItem = (n,v) => {
+			let chatbot = localStorage.getItem("chatbot");
+			let data = !chatbot ? {} : JSON.parse(chatbot);
+			data[n] = v;			
+			try {
+				localStorage.setItem("chatbot", JSON.stringify(data));
+				//localStorage.removeItem(mod);					
+				return true;
+			} catch (exception) {
+				return false;
+			}
+		}
+
 
 
 		$("#write-input").on('input', function(){
@@ -71,28 +79,49 @@
 
 		$("#write-send").on('click',function(){
 			var input = $("#write-input");
-			// console.log(input.attr('data-id'));
-			// console.log(input.val());
+		
 			var next = talk.bootConversation[input.attr('data-id')];
-			console.log(next);
-
+			
 			if(next["condition"] == 'notEmpty'){
+
 				if(!input.val()){
 					conversationBox.append(user("Você precisa inserir um valor"));	
 				}
 				conversationBox.append(user(input.val()));
-				input.val() == "";
-				var regex = /\$1/;
 
-				next.dialog = next.dialog.replace(regex, input.val());
-				conversationBox.append(robot(next.dialog));
+				var template = (tpl, args) => tpl.replace(/\${(\w+)}/g, (_, v) => args[v]);
+
+				next.dialog = template(next.dialog, {i1: input.val()});
+				
+
+				console.log(saveItem(next.depName, input.val()));
+
+				
+				//if (typeof(Storage) !== "undefined") {
+				
+				// localStorage.setItem(next.depName, input.val()){
+
+				// 
+				//} else {
+				    // Sorry! No Web Storage support..
+				//}
+
+
+				input.val("");
+				input.prop('disabled', true);
+
+				
+
+				setTimeout(function(){
+					conversationBox.append(robot(next.dialog));
+				},3000);
 				bootTalk(input.attr('data-id')+1);
 			}
 			
 		});
 
-		function displayDialog(v,i){
-			let timer = (parseInt(i)+1)*3000;
+		function displayDialog(v,i,i_t){
+			let timer = parseInt(i_t)*3000;
 			status.show();
 			setTimeout(function(){
 				conversationBox.append(robot(v.dialog));			
@@ -102,56 +131,96 @@
 			},timer);
 		}
 
-		function displayInput(v,i){
-			//console.log(v+"-"+i)
+		function displayInput(v,i, i_t){
+	
 			setTimeout(function(){
 				$('#write-input').prop('disabled', false);
-				$('#write-input').focus();
+				
 				$('#write-input').attr('data-id',i);			
 
+				$('#write-input').focus();
 
-			},i*3000);
-			//console.log(i);
-			//bootTalk(i);
+			},i_t*3000);
+			
 		}
 
-		function bootTalk($index = 0){
-			//console.log($id);
-								
-			// let conversation = talk.bootConversation.forEach((v, i) => 	{
+		var bootTalk = ($index = 0, $i_time = 1) => {
 
-			// 		if(v.dep){
-			// 			console.log(v.dep);
-			// 			displayInput(v,i);
-			// 			return false;
-			// 		}else{
-			// 			displayDialog(v,i);
-			// 			//return true;
-			// 		}
-			// 	}
-			// );
-			// 
-			
+			if( $index > 0 ) $i_time = 2;			
+
 			for (var i in talk.bootConversation){
-				//console.log(i+">="+$index);
+
 				if(i >= $index){
-					//console.log(talk.bootConversation[i]);
-					//console.log(i);
-					$('#write-input').prop('disabled', true);
-					var v = talk.bootConversation[i];
+
+					$('#write-input').prop('disabled', true);			
+					let v = talk.bootConversation[i];
+			
 					if(v.dep){
-						displayInput(v,i);
+			
+						displayInput(v,i,$i_time);
 						break;
+			
 					}else{
-						displayDialog(v,i);
+			
+						displayDialog(v,i,$i_time);
 					}
-				}
+			
+					$i_time++;
+				}				
 			}
 			setTimeout(function(){
 				status.hide();				
-			},i*3000);
-
+			},($i_time-1)*3000);
 		}
+
+		// function bootTalk($index = 0){
+		// 	//console.log($id);
+								
+		// 	// let conversation = talk.bootConversation.forEach((v, i) => 	{
+
+		// 	// 		if(v.dep){
+		// 	// 			console.log(v.dep);
+		// 	// 			displayInput(v,i);
+		// 	// 			return false;
+		// 	// 		}else{
+		// 	// 			displayDialog(v,i);
+		// 	// 			//return true;
+		// 	// 		}
+		// 	// 	}
+		// 	// );
+		// 	// 
+			
+
+		// 	var i_time = 1;
+		// 	if($index>0){
+		// 		var i_time = 2;
+		// 	}
+		// 	for (var i in talk.bootConversation){
+		// 		//console.log(i+">="+$index);
+		// 		//console.log(i_time);
+		// 		if(i >= $index){
+		// 			//console.log(talk.bootConversation[i]);
+		// 			//console.log(i);
+		// 			$('#write-input').prop('disabled', true);
+		// 			var v = talk.bootConversation[i];
+		// 			if(v.dep){
+		// 				displayInput(v,i,i_time);
+		// 				break;
+		// 			}else{
+		// 				displayDialog(v,i,i_time);
+		// 			}
+		// 			i_time++;
+		// 		}
+
+				
+
+		// 	}
+		// 	setTimeout(function(){
+		// 		status.hide();				
+		// 	},(i_time-1)*3000);
+
+
+		// }
 
 		bootTalk();
 
