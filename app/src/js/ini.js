@@ -4,15 +4,20 @@
 
 	$(document).ready( function(){
 
+		// Elements
 		var status = $('.status');
-
 		var conversationBox = $('.conversation');
+		var writeInput = $('#write-input');
+		var btnSend = $('#write-send');
 
+		// Avatars
 		var avatar = {
 			"robot" : "http://lorempixel.com/60/60/people/?1",
 			"user" : "http://lorempixel.com/60/60/people/?1"
 		}
-			
+		
+		// Dialog Configs		
+		var template = (tpl, args) => tpl.replace(/\${(\w+)}/g, (_, v) => args[v]);
 		var talk = {"bootConversation":[
 						{ "id": 1, "dep": false, "dialog":"Valeu por aceitar a conversa. Será bem rapidinho... Vamos lá?" },
 						{ "id": 1, "dep": false, "dialog":"Meu Nome é Jéff, e o seu?" },
@@ -23,6 +28,7 @@
 
 					]};
 
+		// Message Templates 
 		var robot = (txt) => `
 			<div class="robot">
 				<div class="avatar">
@@ -43,6 +49,7 @@
 				</div>
 			</div>`;
 
+		// Save Storage
 		var saveItem = (n,v) => {
 			let chatbot = localStorage.getItem("chatbot");
 			let data = !chatbot ? {} : JSON.parse(chatbot);
@@ -56,50 +63,42 @@
 			}
 		}
 
-
-
-		$("#write-input").on('input', function(){
+		writeInput.on('input', function(){
 			var input = $(this).val();
 			if(input != ""){
-				$("#write-send").addClass('active');
+				btnSend.addClass('active');
 			}else{
-				$("#write-send").removeClass('active');
+				btnSend.removeClass('active');
 			}
 		});
-
-		$("#write-input").bind("enterKey",function(e){
-			$("#write-send").click();
+		writeInput.bind("enterKey",function(e){
+			btnSend.click();
 		});
-		$("#write-input").keyup(function(e){
+		writeInput.keyup(function(e){
 		    if(e.keyCode == 13)
-		    {
-		        $(this).trigger("enterKey");
-		    }
+		        $(this).trigger("enterKey");		    
 		});
 
-		$("#write-send").on('click',function(){
-			var input = $("#write-input");
+		btnSend.on('click',function(){
 		
-			var next = talk.bootConversation[input.attr('data-id')];
+			var next = talk.bootConversation[writeInput.attr('data-id')];
 			
 			if(next["condition"] == 'notEmpty'){
 
-				if(!input.val()){
+				if(!writeInput.val()){
 					conversationBox.append(user("Você precisa inserir um valor"));	
 				}
-				conversationBox.append(user(input.val()));
 
-				var template = (tpl, args) => tpl.replace(/\${(\w+)}/g, (_, v) => args[v]);
+				conversationBox.append(user(writeInput.val()));
+				next.dialog = template(next.dialog, {i1: writeInput.val()});
+			
 
-				next.dialog = template(next.dialog, {i1: input.val()});
-				
-
-				console.log(saveItem(next.depName, input.val()));
+				//console.log(saveItem(next.depName, writeInput.val()));
 
 				
 				//if (typeof(Storage) !== "undefined") {
 				
-				// localStorage.setItem(next.depName, input.val()){
+				// localStorage.setItem(next.depName, writeInput.val()){
 
 				// 
 				//} else {
@@ -107,41 +106,33 @@
 				//}
 
 
-				input.val("");
-				input.prop('disabled', true);
-
-				
+				writeInput.val("");
+				writeInput.prop('disabled', true);			
 
 				setTimeout(function(){
 					conversationBox.append(robot(next.dialog));
 				},3000);
-				bootTalk(input.attr('data-id')+1);
-			}
-			
+				bootTalk(writeInput.attr('data-id')+1);
+			}			
 		});
 
-		function displayDialog(v,i,i_t){
-			let timer = parseInt(i_t)*3000;
-			status.show();
-			setTimeout(function(){
-				conversationBox.append(robot(v.dialog));			
-				conversationBox.animate({
-					scrollTop: conversationBox.get(0).scrollHeight
-					},1000);
-			},timer);
-		}
-
-		function displayInput(v,i, i_t){
-	
-			setTimeout(function(){
-				$('#write-input').prop('disabled', false);
-				
-				$('#write-input').attr('data-id',i);			
-
-				$('#write-input').focus();
-
-			},i_t*3000);
-			
+		var display = {
+			setTime : 3000,
+			dialog : function(v,i){
+				setTimeout(function(){
+					conversationBox.append(robot(v.dialog));			
+					conversationBox.animate({
+						scrollTop: conversationBox.get(0).scrollHeight
+						},1000);
+				},this.setTime);
+			},
+			input : function(v,i){
+				setTimeout(function(){
+					writeInput.prop('disabled', false);
+					writeInput.attr('data-id',i);			
+					writeInput.focus();
+				},this.setTime);				
+			}
 		}
 
 		var bootTalk = ($index = 0, $i_time = 1) => {
@@ -152,19 +143,17 @@
 
 				if(i >= $index){
 
-					$('#write-input').prop('disabled', true);			
+					writeInput.prop('disabled', true);			
 					let v = talk.bootConversation[i];
-			
-					if(v.dep){
-			
-						displayInput(v,i,$i_time);
-						break;
-			
-					}else{
-			
-						displayDialog(v,i,$i_time);
-					}
-			
+					display.setTime = $i_time*3000;
+
+					if(v.dep){												
+						display.input(v,i);						
+						break;			
+					}else{						
+						status.show();
+						display.dialog(v,i);						
+					}			
 					$i_time++;
 				}				
 			}
@@ -173,57 +162,6 @@
 			},($i_time-1)*3000);
 		}
 
-		// function bootTalk($index = 0){
-		// 	//console.log($id);
-								
-		// 	// let conversation = talk.bootConversation.forEach((v, i) => 	{
-
-		// 	// 		if(v.dep){
-		// 	// 			console.log(v.dep);
-		// 	// 			displayInput(v,i);
-		// 	// 			return false;
-		// 	// 		}else{
-		// 	// 			displayDialog(v,i);
-		// 	// 			//return true;
-		// 	// 		}
-		// 	// 	}
-		// 	// );
-		// 	// 
-			
-
-		// 	var i_time = 1;
-		// 	if($index>0){
-		// 		var i_time = 2;
-		// 	}
-		// 	for (var i in talk.bootConversation){
-		// 		//console.log(i+">="+$index);
-		// 		//console.log(i_time);
-		// 		if(i >= $index){
-		// 			//console.log(talk.bootConversation[i]);
-		// 			//console.log(i);
-		// 			$('#write-input').prop('disabled', true);
-		// 			var v = talk.bootConversation[i];
-		// 			if(v.dep){
-		// 				displayInput(v,i,i_time);
-		// 				break;
-		// 			}else{
-		// 				displayDialog(v,i,i_time);
-		// 			}
-		// 			i_time++;
-		// 		}
-
-				
-
-		// 	}
-		// 	setTimeout(function(){
-		// 		status.hide();				
-		// 	},(i_time-1)*3000);
-
-
-		// }
-
 		bootTalk();
-
-
 	}); 
 })(jQuery);
