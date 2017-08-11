@@ -103,7 +103,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('server', function(){
-	var server = liveserver.static('./dist',8000);
+	var server = liveserver.static('./dist',3000);
 	server.start();
 	gulp.watch('dist/assets/css/**/*.css', function(f){
 		liveserver.notify.apply(server,[f])
