@@ -8858,7 +8858,7 @@ nav ul {
       height: 480px;
       overflow-y: scroll; }
       #chat section .conversation .robot, #chat section .conversation .user {
-        margin-top: 50px;
+        margin-top: 5px;
         width: 60%;
         color: #fff;
         transform: scale(0);
@@ -8866,6 +8866,9 @@ nav ul {
         animation: bounce 500ms linear both; }
         #chat section .conversation .robot .avatar, #chat section .conversation .user .avatar {
           height: 100%; }
+          #chat section .conversation .robot .avatar .icon, #chat section .conversation .user .avatar .icon {
+            width: 60px;
+            heigth: 60px; }
         #chat section .conversation .robot .msg, #chat section .conversation .user .msg {
           padding: 10px;
           border-radius: 10px;
@@ -8894,6 +8897,10 @@ nav ul {
         display: none; }
       #chat section .interation .write {
         border-top: 1px solid #898989; }
+        #chat section .interation .write label {
+          color: #686868;
+          padding: 20px;
+          font-weight: normal; }
         #chat section .interation .write input {
           color: #686868;
           border: none;
@@ -8904,7 +8911,7 @@ nav ul {
           float: left; }
           #chat section .interation .write input:focus {
             outline: none; }
-        #chat section .interation .write button {
+        #chat section .interation .write .send {
           margin: 20px 0px 10px;
           width: 50px;
           height: 50px;
@@ -8913,10 +8920,13 @@ nav ul {
           -moz-border-radius: 50px;
           -ms-border-radius: 50px;
           -o-border-radius: 50px; }
-          #chat section .interation .write button.active {
+          #chat section .interation .write .send.active {
             background: #28CA42;
             color: #FFF;
             border: none; }
+        #chat section .interation .write .field_autocomplete {
+          width: 90%;
+          float: left; }
 
 .busca legend,
 .busca label,
@@ -8956,3 +8966,104 @@ nav ul {
     transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   100% {
     transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); } }
+
+.field_autocomplete.tagged input {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none; }
+
+.field_autocomplete {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  line-height: 1;
+  min-width: 300px; }
+
+.field_autocomplete *, .field_autocomplete *:before, .field_autocomplete *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit; }
+
+.field_autocomplete input {
+  width: 100%;
+  padding: 10px;
+  border-bottom: 1px solid #333333;
+  background: none;
+  color: #686868;
+  display: block;
+  padding: .8em;
+  border: 1px solid gray; }
+
+.field_autocomplete input:focus {
+  border-color: black; }
+
+.field_autocomplete input:-moz-placeholder {
+  color: #686868;
+  font-style: normal; }
+
+.field_autocomplete input::-moz-placeholder {
+  color: #686868;
+  font-style: normal; }
+
+.field_autocomplete input:-ms-input-placeholder {
+  color: #686868;
+  font-style: normal; }
+
+.field_autocomplete input::-webkit-input-placeholder {
+  color: #686868;
+  font-style: normal; }
+
+.field_autocomplete .tag {
+  font-size: 100%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 0;
+  right: 0;
+  background: #dddddd;
+  padding: 1.2em;
+  cursor: pointer;
+  color: black;
+  overflow: hidden; }
+
+.field_autocomplete .tag:hover {
+  background: #EDEDED; }
+
+.field_autocomplete.tagged input {
+  border: none; }
+
+.field_autocomplete .options_list {
+  position: absolute;
+  top: -20%;
+  height: 30px;
+  z-index: 3;
+  background: white;
+  left: 3px;
+  right: 3px;
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  overflow: hidden; }
+
+.field_autocomplete .options_list .item_list {
+  display: block;
+  float: left;
+  padding: 1.2em;
+  font-size: 80%; }
+
+.field_autocomplete .options_list .item_list strong {
+  font-weight: bold; }
+
+.field_autocomplete .options_list .item_list.selected {
+  background: yellow; }
+
+.field_autocomplete.openup .options_list {
+  top: auto;
+  bottom: 100%;
+  -moz-box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.6); }

@@ -68,7 +68,7 @@
       height: 480px;
       overflow-y: scroll; }
       #chat section .conversation .robot, #chat section .conversation .user {
-        margin-top: 50px;
+        margin-top: 5px;
         width: 60%;
         color: #fff;
         transform: scale(0);
@@ -76,6 +76,9 @@
         animation: bounce 500ms linear both; }
         #chat section .conversation .robot .avatar, #chat section .conversation .user .avatar {
           height: 100%; }
+          #chat section .conversation .robot .avatar .icon, #chat section .conversation .user .avatar .icon {
+            width: 60px;
+            heigth: 60px; }
         #chat section .conversation .robot .msg, #chat section .conversation .user .msg {
           padding: 10px;
           border-radius: 10px;
@@ -104,6 +107,10 @@
         display: none; }
       #chat section .interation .write {
         border-top: 1px solid #898989; }
+        #chat section .interation .write label {
+          color: #686868;
+          padding: 20px;
+          font-weight: normal; }
         #chat section .interation .write input {
           color: #686868;
           border: none;
@@ -114,7 +121,7 @@
           float: left; }
           #chat section .interation .write input:focus {
             outline: none; }
-        #chat section .interation .write button {
+        #chat section .interation .write .send {
           margin: 20px 0px 10px;
           width: 50px;
           height: 50px;
@@ -123,7 +130,10 @@
           -moz-border-radius: 50px;
           -ms-border-radius: 50px;
           -o-border-radius: 50px; }
-          #chat section .interation .write button.active {
+          #chat section .interation .write .send.active {
             background: #28CA42;
             color: #FFF;
             border: none; }
+        #chat section .interation .write .field_autocomplete {
+          width: 90%;
+          float: left; }

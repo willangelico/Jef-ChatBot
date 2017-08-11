@@ -1,6 +1,7 @@
 @import 'mixin';
 
 #chat{
+	
 	.ball{
 		@include border-radius(100px);		
 		display: inline-block;	
@@ -86,7 +87,7 @@
 			height: 480px;
 			overflow-y: scroll;			
 			.robot,.user{
-				margin-top: 50px;
+				margin-top: 5px;
 				width: 60%;
 				color: #fff;	
 				transform: scale(0);
@@ -94,6 +95,10 @@
 				animation: bounce 500ms linear both;
 				.avatar{
 					height: 100%;
+					.icon{
+						width: 60px;
+						heigth: 60px;
+					}
 				}
 				.msg{
 					padding: 10px;	
@@ -132,6 +137,11 @@
 			}
 			.write{
 				border-top: 1px solid #898989;
+				label{
+					color: #686868;
+					padding: 20px;
+					font-weight: normal;
+				}
 				input{
 					color: #686868;
 					border: none;
@@ -144,7 +154,7 @@
 						outline: none;
 					}
 				}
-				button{
+				.send{
 					margin: 20px 0px 10px;
 					width: 50px;
     				height: 50px;    				
@@ -154,6 +164,10 @@
     					color: #FFF;
     					border: none;
 					}
+				}
+				.field_autocomplete{
+					width: 90%;
+					float: left;
 				}
 			}
 		}
